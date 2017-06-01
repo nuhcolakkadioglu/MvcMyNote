@@ -15,10 +15,10 @@
                     <h1 class="text-center ">kullanıcı giriş</h1>
                 </div>
                 <div class="main-content">
-
+                    @Html.ValidationSummary(false);
                     <div class="input-group ">
                         <span class="input-group-addon"><span class="glyphicon glyphicon-user" aria-hidden="true"></span></span>
-                        @Html.TextBoxFor(m => m.UserName, null, new { @class = "form-control", placeholder = "email adres" })
+                        @Html.TextBoxFor(m => m.UserName, null, new { @class = "form-control", placeholder = "kullanıcı adı" })
                         @Html.ValidationMessageFor(m => m.UserName,null,new {@class="label label-danger" })
 
                     </div>

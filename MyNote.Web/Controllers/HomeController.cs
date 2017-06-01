@@ -55,6 +55,20 @@ namespace MyNote.Web.Controllers
         [HttpPost]
         public ActionResult Login(LoginViewModel model)
         {
+           
+            if(ModelState.IsValid)
+            {
+                BussinesLayerResult<NoteUser> user = NoteUserManager.LoginUser(model);
+
+                if (user.Errors.Count > 0)
+                {
+                    user.Errors.ForEach(m => ModelState.AddModelError("", m));
+                    return View(model);
+                }
+                Session["login"] = user;
+                return RedirectToAction("Index");
+            }
+            
             return View();
         }
 
@@ -68,6 +82,7 @@ namespace MyNote.Web.Controllers
             return View();
         }
 
+        // kullanıcı kayıt 
         [HttpPost]
         public ActionResult Register(RegisterViewModel model)
         {

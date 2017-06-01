@@ -13,6 +13,7 @@ namespace MyNote.BussinessLayer
     {
         private static Repository<NoteUser> _repoUser = new Repository<NoteUser>();
 
+        //yeni kullanıcı kayıt işlemleri
         public static BussinesLayerResult<NoteUser> RegisterUser(RegisterViewModel model)
         {
             BussinesLayerResult<NoteUser> layerResult = new BussinesLayerResult<NoteUser>();
@@ -49,6 +50,28 @@ namespace MyNote.BussinessLayer
                     // TODO :  aktivasyon mail' i atılacak
                     // layerResult.Result.ActivateGuid  bu kodu email olarak gönder 
                 }
+            }
+
+            return layerResult;
+        }
+
+        public static BussinesLayerResult<NoteUser> LoginUser(LoginViewModel model)
+        {
+
+
+            BussinesLayerResult<NoteUser> layerResult = new BussinesLayerResult<NoteUser>();
+            layerResult.Result = _repoUser.Find(m => m.Username == model.UserName && m.Password == model.Password);
+
+            if (layerResult.Result != null)
+            {
+                if (!layerResult.Result.IsActive)
+                {
+                    layerResult.Errors.Add("kullanıcı aktif degil e-postanızdan aktiv ediniz");
+                }
+            }
+            else
+            {
+                layerResult.Errors.Add("kullanıcı adı yada şifre hatalı");
             }
 
             return layerResult;
