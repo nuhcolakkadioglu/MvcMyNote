@@ -89,7 +89,7 @@ namespace MyNote.Web.Controllers
                 return RedirectToAction("RegisterOk");
             }
 
-            // kullanıcı adı ve e-posta  kontrolüs
+            // kullanıcı adı ve e-posta  kontrolü
             //aktivasyon e-posta gönderimi
             return View(model);
         }
