@@ -56,6 +56,10 @@
     <Compile Include="CategoryManager.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\MyNote.Common\MyNote.Common.csproj">
+      <Project>{dcacb776-1759-4c3a-b30f-83bd96fb7d04}</Project>
+      <Name>MyNote.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MyNote.DataAccessLayer\MyNote.DataAccessLayer.csproj">
       <Project>{83ece1a8-fdc4-4b9c-ad25-a86dbd8fbb3a}</Project>
       <Name>MyNote.DataAccessLayer</Name>

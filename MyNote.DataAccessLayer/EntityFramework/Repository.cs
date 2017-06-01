@@ -1,4 +1,5 @@
-﻿using MyNote.DataAccessLayer.Abstract;
+﻿using MyNote.Common;
+using MyNote.DataAccessLayer.Abstract;
 using MyNote.Enties;
 using System;
 using System.Collections.Generic;
@@ -36,7 +37,7 @@ namespace MyNote.DataAccessLayer.EntityFramework
               
                 o.CreatedOn = DateTime.Now;
                 o.Modified = DateTime.Now;
-                o.ModifiedUsername = "system"; // TODO : işlem yapan user yazılmalı
+                o.ModifiedUsername = App.Common.GetUserName();// TODO : işlem yapan user yazılmalı
             }
             _dbSet.Add(model);
 
@@ -50,7 +51,7 @@ namespace MyNote.DataAccessLayer.EntityFramework
                 MyEntityBase o = model as MyEntityBase;
 
                 o.Modified = DateTime.Now;
-                o.ModifiedUsername = "system"; // TODO : işlem yapan user yazılmalı
+                o.ModifiedUsername = App.Common.GetUserName(); // TODO : işlem yapan user yazılmalı
             }
             return Save();
         }

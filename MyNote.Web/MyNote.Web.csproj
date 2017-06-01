@@ -171,6 +171,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Init\WebCommon.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -198,6 +199,10 @@
     <ProjectReference Include="..\MyNote.BussinessLayer\MyNote.BussinessLayer.csproj">
       <Project>{41315857-d299-44c0-86ee-b08b97ca2e72}</Project>
       <Name>MyNote.BussinessLayer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MyNote.Common\MyNote.Common.csproj">
+      <Project>{dcacb776-1759-4c3a-b30f-83bd96fb7d04}</Project>
+      <Name>MyNote.Common</Name>
     </ProjectReference>
     <ProjectReference Include="..\MyNote.Enties\MyNote.Enties.csproj">
       <Project>{172d6614-d609-42de-8049-2d18440539dd}</Project>
