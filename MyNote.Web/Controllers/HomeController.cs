@@ -75,5 +75,11 @@ namespace MyNote.Web.Controllers
             return View();
         }
 
+        public ActionResult UserActivate(Guid activate_id)
+        {
+            //kullanıcı kayıt sonrası aktif
+            return View();
+        }
+
     }
 }
