@@ -1,4 +1,5 @@
-﻿using MyNote.Common;
+﻿using MyNote.BussinessLayer;
+using MyNote.Common;
 using MyNote.Enties;
 using System;
 using System.Collections.Generic;
@@ -13,8 +14,8 @@ namespace MyNote.Web.Init
         {
             if(HttpContext.Current.Session["login"] !=null)
             {
-                NoteUser user = HttpContext.Current.Session["login"] as NoteUser;
-                return user.Username;
+                BussinesLayerResult<NoteUser> user = HttpContext.Current.Session["login"] as BussinesLayerResult<NoteUser>;
+                return user.Result.Username;
             }
            
                 return null;

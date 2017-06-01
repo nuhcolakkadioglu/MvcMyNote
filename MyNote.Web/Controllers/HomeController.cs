@@ -45,6 +45,7 @@ namespace MyNote.Web.Controllers
 
         public ActionResult Hakkimda()
         {
+
             return View();
         }
 
@@ -118,9 +119,31 @@ namespace MyNote.Web.Controllers
             return View();
         }
 
-        public ActionResult UserActivate(Guid activate_id)
+        public ActionResult UserActivate(Guid ActivateGuid)
         {
-            //kullanıcı kayıt sonrası aktif
+           BussinesLayerResult<NoteUser> user =   NoteUserManager.ActiveUser(ActivateGuid);
+            if(user.Errors.Count>0)
+            {
+                TempData["errors"] = user.Errors;
+                return RedirectToAction("UserActivateCancel");
+            }
+
+            return RedirectToAction("UserActivateOk");
+        }
+
+        public ActionResult UserActivateCancel()
+        {
+            List<ErrorMessageObj> error = null;
+            if (TempData["errors"]!=null)
+            {
+                error = TempData["errors"] as List<ErrorMessageObj>;
+            }
+            return View(error);
+        }
+
+        public ActionResult UserActivateOk()
+        {
+
             return View();
         }
 
