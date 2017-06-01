@@ -10,5 +10,10 @@ namespace MyNote.BussinessLayer
     {
         public List<string> Errors { get; set; }
         public T Result { get; set; }
+
+        public BussinesLayerResult()
+        {
+            Errors = new List<string>();
+        }
     }
 }

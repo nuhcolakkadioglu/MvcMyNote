@@ -1,4 +1,5 @@
 ﻿using MyNote.DataAccessLayer.Abstract;
+using MyNote.Enties;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -28,18 +29,37 @@ namespace MyNote.DataAccessLayer.EntityFramework
 
         public int Insert(T model)
         {
+           
+            if(model is MyEntityBase)
+            {
+                MyEntityBase o = model as MyEntityBase;
+              
+                o.CreatedOn = DateTime.Now;
+                o.Modified = DateTime.Now;
+                o.ModifiedUsername = "system"; // TODO : işlem yapan user yazılmalı
+            }
             _dbSet.Add(model);
+
             return Save();
         }
 
         public int Update(T model)
         {
+            if (model is MyEntityBase)
+            {
+                MyEntityBase o = model as MyEntityBase;
+
+                o.Modified = DateTime.Now;
+                o.ModifiedUsername = "system"; // TODO : işlem yapan user yazılmalı
+            }
             return Save();
         }
 
         public int Delete(T model)
         {
-             _dbSet.Remove(model);
+         
+            _dbSet.Remove(model);
+
             return Save();
         }
 

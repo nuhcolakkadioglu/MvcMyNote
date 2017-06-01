@@ -74,35 +74,19 @@ namespace MyNote.Web.Controllers
 
             if(ModelState.IsValid)
             {
-                NoteUser user = null;
+                BussinesLayerResult<NoteUser> user = new BussinesLayerResult<NoteUser>();
+                user = NoteUserManager.RegisterUser(model);
 
-                //try
-                //{
-                //    user= NoteUserManager.RegisterUser(model);
-                //}
-                //catch (Exception ex)
-                //{
-
-                //    ModelState.AddModelError("", ex.Message);
-                //}
-
-
-                //foreach (var item in ModelState)
-                //{
-                //    if(item.Value.Errors.Count>0)
-                //    {
-                //         return View(model);
-                //    }
-                //}
-
-                //if (user == null)
-                //    return View(model);
-
+                if(user.Errors.Count>0)
+                {
+                    user.Errors.ForEach(m => ModelState.AddModelError("", m));
+                    return View(model);
+                }
+             
                 return RedirectToAction("RegisterOk");
             }
 
-            // kullanıcı adı ve e-posta  kontrolü
-            //aktivasyon e-posta gönderimi
+           
             return View(model);
         }
 

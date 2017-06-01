@@ -30,18 +30,23 @@ namespace MyNote.BussinessLayer
                     layerResult.Errors.Add("Email  kayıtlı");
                 }
 
-            }else
+            }
+            else
             {
-              int dbResult =   _repoUser.Insert(new NoteUser()
+                int dbResult = _repoUser.Insert(new NoteUser()
                 {
-                    Email=model.Email,
-                    Password=model.Password,
-                    Username=model.Username
+                    Email = model.Email,
+                    Password = model.Password,
+                    Username = model.Username,
+                    IsActive = false,
+                    ActivateGuid = Guid.NewGuid(),
+                    IsAdmin=false
                 });
 
-                if(dbResult>1)
+                if (dbResult > 0)
                 {
-                  layerResult.Result=  _repoUser.Find(m=>m.Email==model.Email&&m.Username==model.Username);
+                    layerResult.Result = _repoUser.Find(m => m.Email == model.Email && m.Username == model.Username);
+                    // TODO :  aktivasyon mail' i atılacak
                     // layerResult.Result.ActivateGuid  bu kodu email olarak gönder 
                 }
             }
