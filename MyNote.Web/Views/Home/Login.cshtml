@@ -15,11 +15,20 @@
                     <h1 class="text-center ">kullanıcı giriş</h1>
                 </div>
                 <div class="main-content">
+
                     @Html.ValidationSummary(false);
+
+                   
+                    <br />
+                    @if (@ViewBag.Link != null)
+                    {
+                        <a class="btn btn-primary" href="@ViewBag.Link">Aktif Et</a>
+                    }
+
                     <div class="input-group ">
                         <span class="input-group-addon"><span class="glyphicon glyphicon-user" aria-hidden="true"></span></span>
                         @Html.TextBoxFor(m => m.UserName, null, new { @class = "form-control", placeholder = "kullanıcı adı" })
-                        @Html.ValidationMessageFor(m => m.UserName,null,new {@class="label label-danger" })
+                        @Html.ValidationMessageFor(m => m.UserName, null, new { @class = "label label-danger" })
 
                     </div>
                     <div class="input-group">
@@ -30,6 +39,7 @@
 
                     <div class="form-group ">
                         <button type="submit" class="btn btn-danger btn-lg btn-block login-button">Giriş</button>
+                      
                     </div>
 
 

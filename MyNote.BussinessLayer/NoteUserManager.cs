@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using MyNote.DataAccessLayer.EntityFramework;
 using MyNote.Enties;
 using MyNote.Enties.DTO;
+using MyNote.Enties.Messages;
 
 namespace MyNote.BussinessLayer
 {
@@ -23,12 +24,12 @@ namespace MyNote.BussinessLayer
             {
                 if (user.Username == model.Username)
                 {
-                    layerResult.Errors.Add("kullanıcı adı kayıtlı");
+                    layerResult.AddError(ErrorMessageCode.KullaniciAdiZatenVar, "kullanıcı adı kayıtlı");
                 }
 
                 if (user.Email == model.Email)
                 {
-                    layerResult.Errors.Add("Email  kayıtlı");
+                    layerResult.AddError(ErrorMessageCode.EmailKayitli, "Email  kayıtlı");
                 }
 
             }
@@ -66,12 +67,13 @@ namespace MyNote.BussinessLayer
             {
                 if (!layerResult.Result.IsActive)
                 {
-                    layerResult.Errors.Add("kullanıcı aktif degil e-postanızdan aktiv ediniz");
+                    //layerResult.Errors.Add("kullanıcı aktif degil e-postanızdan aktiv ediniz");
+                    layerResult.AddError(ErrorMessageCode.UserAktifDegil, "kullanıcı aktif degil e-postanızdan aktiv ediniz");
                 }
             }
             else
             {
-                layerResult.Errors.Add("kullanıcı adı yada şifre hatalı");
+                layerResult.AddError(ErrorMessageCode.KullaniciAdiVeSifreUyusmuyor, "kullanıcı adı yada şifre hatalı");
             }
 
             return layerResult;

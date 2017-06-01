@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MyNote.Enties.Messages;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,12 +9,17 @@ namespace MyNote.BussinessLayer
 {
   public  class BussinesLayerResult<T> where T:class
     {
-        public List<string> Errors { get; set; }
+        public List<ErrorMessageObj> Errors { get; set; }
         public T Result { get; set; }
 
         public BussinesLayerResult()
         {
-            Errors = new List<string>();
+            Errors = new List<ErrorMessageObj>();
+        }
+
+        public void AddError(ErrorMessageCode code,string message)
+        {
+            Errors.Add(new ErrorMessageObj() { Code=code,Message=message});
         }
     }
 }

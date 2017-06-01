@@ -1,7 +1,7 @@
 ﻿using MyNote.BussinessLayer;
 using MyNote.Enties;
 using MyNote.Enties.DTO;
-
+using MyNote.Enties.Messages;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -62,7 +62,13 @@ namespace MyNote.Web.Controllers
 
                 if (user.Errors.Count > 0)
                 {
-                    user.Errors.ForEach(m => ModelState.AddModelError("", m));
+                    user.Errors.ForEach(m => ModelState.AddModelError("", m.Message));
+
+                    if(user.Errors.Find(m => m.Code == ErrorMessageCode.UserAktifDegil)!=null)
+                    {
+                        ViewBag.Link = "/Home/UserActivate";
+                    }
+
                     return View(model);
                 }
                 Session["login"] = user;
@@ -94,7 +100,7 @@ namespace MyNote.Web.Controllers
 
                 if(user.Errors.Count>0)
                 {
-                    user.Errors.ForEach(m => ModelState.AddModelError("", m));
+                    user.Errors.ForEach(m => ModelState.AddModelError("", m.Message));
                     return View(model);
                 }
              
