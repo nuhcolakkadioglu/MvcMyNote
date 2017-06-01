@@ -70,8 +70,32 @@ namespace MyNote.Web.Controllers
         [HttpPost]
         public ActionResult Register(RegisterViewModel model)
         {
+
+            if(ModelState.IsValid)
+            {
+                if(model.Username=="aa")
+                {
+                    ModelState.AddModelError("","kullanıcı adı kullanıluyor");
+                }
+
+                foreach (var item in ModelState)
+                {
+                    if(item.Value.Errors.Count>0)
+                    {
+                         return View(model);
+                    }
+                }
+
+                return RedirectToAction("RegisterOk");
+            }
+
             // kullanıcı adı ve e-posta  kontrolü
             //aktivasyon e-posta gönderimi
+            return View(model);
+        }
+
+        public ActionResult RegisterOk()
+        {
             return View();
         }
 

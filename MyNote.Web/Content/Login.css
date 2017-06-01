@@ -43,3 +43,8 @@
 .remember{
     color: black;
 }
+.validation-summary-errors{
+    color:red;
+    border:2px dotted #a94442;
+    border-radius:8px;
+}
