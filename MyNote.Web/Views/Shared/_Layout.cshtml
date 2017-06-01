@@ -1,4 +1,7 @@
-﻿<!DOCTYPE html>
+﻿@using MyNote.Enties
+@using MyNote.BussinessLayer
+
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8">
@@ -21,6 +24,15 @@
     <![endif]-->
 </head>
 <body>
+    @{
+        NoteUser   user = null;
+
+        if (Session["login"] != null)
+        {
+            user = Session["login"] as NoteUser;
+       
+        }
+    }
     <!-- Navigation -->
     <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
         <div class="container">
@@ -38,12 +50,15 @@
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
 
-                    <li>
-                        <a href="#">
-                            <span class="glyphicon glyphicon-wrench"></span>
-                            Yönetim
-                        </a>
-                    </li>
+                    @if (user != null && user.IsAdmin==true)
+                    {
+                        <li>
+                            <a href="#">
+                                <span class="glyphicon glyphicon-wrench"></span>
+                                Yönetim
+                            </a>
+                        </li>
+                    }
 
                     <li>
                         <a href="/Home/EnBegeni">
@@ -67,33 +82,40 @@
                 </ul>
 
                 <ul class="nav navbar-nav navbar-right">
-                    <li>
-                        <a href="/Home/Login">
-                            <span class="glyphicon glyphicon-log-in"></span>
-                            Giriş
-                        </a>
-                    </li>
-                    <li>
-                        <a href="/Home/Register">
-                            <span class="glyphicon glyphicon-user"></span>
-                            Üye Ol
-                        </a>
-                    </li>
-                    <li>
-                        <a href="">
-                            <span class="glyphicon glyphicon-user"></span>
+                    @if (user == null)
+                    {
+                        <li>
+                            <a href="/Home/Login">
+                                <span class="glyphicon glyphicon-log-in"></span>
+                                Giriş
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/Home/Register">
+                                <span class="glyphicon glyphicon-user"></span>
+                                Üye Ol
+                            </a>
+                        </li>
+                    }
+                    @if (user != null)
+                    {
+                        <li>
+                            <a href="/Home/ShowProfile">
+                                <span class="glyphicon glyphicon-user"></span>
+                                @user.Username
+                            </a>
+                        </li>
 
-                            NCk
-                        </a>
-                    </li>
-                    <li>
+                        <li>
 
-                        <a href="">
-                            <span class="glyphicon glyphicon-log-out"></span>
+                            <a href="/Home/LogOut">
+                                <span class="glyphicon glyphicon-log-out"></span>
 
-                            Çıkış
-                        </a>
-                    </li>
+                                Çıkış
+                            </a>
+                        </li>
+                    }
+                  
                 </ul>
 
             </div>

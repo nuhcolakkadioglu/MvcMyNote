@@ -107,5 +107,19 @@ namespace MyNote.BussinessLayer
 
             return resultLayer;
         }
+
+        public static BussinesLayerResult<NoteUser> GetUserById(int id)
+        {
+            BussinesLayerResult<NoteUser> resultLayer = new BussinesLayerResult<NoteUser>();
+
+            resultLayer.Result = _repoUser.Find(m => m.Id == id);
+
+            if(resultLayer.Result==null)
+            {
+                resultLayer.AddError(ErrorMessageCode.KullaniciBulunamadi, "Kullanıcı bulunamadı");
+            }
+
+            return resultLayer;
+        }
     }
 }

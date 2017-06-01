@@ -61,7 +61,7 @@ namespace MyNote.Web.Controllers
             if(ModelState.IsValid)
             {
                 BussinesLayerResult<NoteUser> user = NoteUserManager.LoginUser(model);
-
+                NoteUser session = user.Result;
                 if (user.Errors.Count > 0)
                 {
                     user.Errors.ForEach(m => ModelState.AddModelError("", m.Message));
@@ -73,7 +73,7 @@ namespace MyNote.Web.Controllers
 
                     return View(model);
                 }
-                Session["login"] = user;
+                Session["login"] = session;
                 return RedirectToAction("Index");
             }
             
@@ -144,6 +144,36 @@ namespace MyNote.Web.Controllers
         public ActionResult UserActivateOk()
         {
 
+            return View();
+        }
+
+
+        public ActionResult ShowProfile()
+        {
+            NoteUser user = Session["login"] as NoteUser;
+            BussinesLayerResult<NoteUser> res = NoteUserManager.GetUserById(user.Id);
+
+            if(res.Errors.Count>0)
+            {
+                //hata sayfası
+            }
+
+            return View(res.Result);
+        }
+
+        public ActionResult EditProfile()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult EditProfile(NoteUser model)
+        {
+            return View();
+        }
+
+        public ActionResult RemoveProfile()
+        {
             return View();
         }
 

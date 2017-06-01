@@ -11,6 +11,7 @@ namespace MyNote.Enties.Messages
         KullaniciAdiZatenVar = 153,
         EmailKayitli =154,
         KullaniciAkitf=180,
-        AktiveteIdyok=181
+        AktiveteIdyok=181,
+        KullaniciBulunamadi=182
     }
 }

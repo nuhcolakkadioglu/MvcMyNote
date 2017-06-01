@@ -24,6 +24,9 @@ namespace MyNote.Enties
         [Required]
         public Guid ActivateGuid { get; set; }
 
+
+        public string ProfileImageFileName { get; set; } 
+
         public bool IsActive { get; set; }
         public bool IsAdmin { get; set; }
        

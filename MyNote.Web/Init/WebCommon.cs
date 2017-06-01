@@ -14,8 +14,8 @@ namespace MyNote.Web.Init
         {
             if(HttpContext.Current.Session["login"] !=null)
             {
-                BussinesLayerResult<NoteUser> user = HttpContext.Current.Session["login"] as BussinesLayerResult<NoteUser>;
-                return user.Result.Username;
+                NoteUser user = HttpContext.Current.Session["login"] as NoteUser;
+                return user.Username;
             }
            
                 return "system";

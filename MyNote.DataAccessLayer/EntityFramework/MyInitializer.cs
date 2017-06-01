@@ -24,7 +24,8 @@ namespace MyNote.DataAccessLayer.EntityFramework
                 Password = "1s1s",
                 CreatedOn = DateTime.Now,
                 Modified = DateTime.Now.AddMinutes(5),
-                ModifiedUsername = "nck"
+                ModifiedUsername = "nck",
+                ProfileImageFileName = "User.png"
             };
 
             NoteUser user = new NoteUser()
@@ -39,7 +40,8 @@ namespace MyNote.DataAccessLayer.EntityFramework
                 Password = "2s2s",
                 CreatedOn = DateTime.Now,
                 Modified = DateTime.Now.AddMinutes(5),
-                ModifiedUsername = "nck"
+                ModifiedUsername = "nck",
+                ProfileImageFileName = "User.png"
             };
 
             context.NoteUsers.Add(admin);
@@ -59,7 +61,8 @@ namespace MyNote.DataAccessLayer.EntityFramework
                     Password = "2s2s",
                     CreatedOn = DateTime.Now,
                     Modified = DateTime.Now.AddMinutes(5),
-                    ModifiedUsername = "nck"
+                    ModifiedUsername = "nck",
+                    ProfileImageFileName = "User.png"
                 };
 
                 context.NoteUsers.Add(fakeUser);
