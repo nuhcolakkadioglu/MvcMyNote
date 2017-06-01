@@ -43,6 +43,8 @@
   <ItemGroup>
     <Compile Include="Category.cs" />
     <Compile Include="Comment.cs" />
+    <Compile Include="DTO\LoginViewModel.cs" />
+    <Compile Include="DTO\RegisterViewModel.cs" />
     <Compile Include="Liked.cs" />
     <Compile Include="MyEntityBase.cs" />
     <Compile Include="Note.cs" />

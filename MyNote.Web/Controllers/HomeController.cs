@@ -1,6 +1,7 @@
 ﻿using MyNote.BussinessLayer;
 using MyNote.Enties;
-using MyNote.Web.ViewModels;
+using MyNote.Enties.DTO;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -73,18 +74,29 @@ namespace MyNote.Web.Controllers
 
             if(ModelState.IsValid)
             {
-                if(model.Username=="aa")
-                {
-                    ModelState.AddModelError("","kullanıcı adı kullanıluyor");
-                }
+                NoteUser user = null;
 
-                foreach (var item in ModelState)
-                {
-                    if(item.Value.Errors.Count>0)
-                    {
-                         return View(model);
-                    }
-                }
+                //try
+                //{
+                //    user= NoteUserManager.RegisterUser(model);
+                //}
+                //catch (Exception ex)
+                //{
+
+                //    ModelState.AddModelError("", ex.Message);
+                //}
+
+
+                //foreach (var item in ModelState)
+                //{
+                //    if(item.Value.Errors.Count>0)
+                //    {
+                //         return View(model);
+                //    }
+                //}
+
+                //if (user == null)
+                //    return View(model);
 
                 return RedirectToAction("RegisterOk");
             }
