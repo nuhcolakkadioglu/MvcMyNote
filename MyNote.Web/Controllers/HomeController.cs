@@ -52,6 +52,7 @@ namespace MyNote.Web.Controllers
         {
             return View();
         }
+        //login post
         [HttpPost]
         public ActionResult Login(LoginViewModel model)
         {
@@ -80,7 +81,8 @@ namespace MyNote.Web.Controllers
 
         public ActionResult LogOut()
         {
-            return View();
+            Session.Clear();
+            return RedirectToAction("Index");
         }
 
         public ActionResult Register()
