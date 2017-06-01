@@ -1,0 +1,47 @@
+﻿@model MyNote.Web.ViewModels.LoginViewModel
+@{
+    ViewBag.Title = "Kullanıcı Giriş Formu";
+}
+<title>Kullanıcı giriş formu</title>
+<link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+<link href="~/Content/Login.css" rel="stylesheet" />
+
+@using (Html.BeginForm())
+{
+    <section class="login-info">
+        <div class="container">
+            <div class="row main">
+                <div class="form-header">
+                    <h1 class="text-center ">kullanıcı giriş</h1>
+                </div>
+                <div class="main-content">
+
+                    <div class="input-group ">
+                        <span class="input-group-addon"><span class="glyphicon glyphicon-user" aria-hidden="true"></span></span>
+                        @Html.TextBoxFor(m => m.UserName, null, new { @class = "form-control", placeholder = "email adres" })
+                        @Html.ValidationMessageFor(m => m.UserName,null,new {@class="label label-danger" })
+
+                    </div>
+                    <div class="input-group">
+                        <span class="input-group-addon"><span class="glyphicon glyphicon-lock" aria-hidden="true"></span></span>
+                        @Html.TextBoxFor(m => m.Password, null, new { @class = "form-control", placeholder = "şifre", type = "password" })
+                        @Html.ValidationMessageFor(m => m.Password)
+                    </div>
+
+                    <div class="form-group ">
+                        <button type="submit" class="btn btn-danger btn-lg btn-block login-button">Giriş</button>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </section>
+}
+
+
+<script>
+    $(function () {
+        $('footer').hide();
+    });
+</script>

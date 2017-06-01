@@ -1,0 +1,12 @@
+﻿@using MyNote.BussinessLayer
+@using MyNote.Enties
+
+<p class="lead">Kategoriler</p>
+<div class="list-group">
+    <a href="/Home/Index" class="list-group-item"><span class="glyphicon glyphicon-arrow-right"></span>Tümü</a>
+
+    @foreach (Category item in CategoryManager.GetCategories())
+    {
+        <a href="@Url.Action("ByCategory", "Home", new { id = item.Id })" title="@item.Description" class="list-group-item"><span class="glyphicon glyphicon-arrow-right"></span>@item.Title</a>
+    }
+</div>
