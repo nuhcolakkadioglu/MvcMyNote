@@ -119,9 +119,9 @@ namespace MyNote.Web.Controllers
             return View();
         }
 
-        public ActionResult UserActivate(Guid ActivateGuid)
+        public ActionResult UserActivate(Guid id)
         {
-           BussinesLayerResult<NoteUser> user =   NoteUserManager.ActiveUser(ActivateGuid);
+           BussinesLayerResult<NoteUser> user =   NoteUserManager.ActiveUser(id);
             if(user.Errors.Count>0)
             {
                 TempData["errors"] = user.Errors;

@@ -18,7 +18,7 @@ namespace MyNote.Web.Init
                 return user.Result.Username;
             }
            
-                return null;
+                return "system";
            
         }
     }

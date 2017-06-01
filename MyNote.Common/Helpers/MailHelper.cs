@@ -22,7 +22,7 @@ namespace MyNote.Common.Helpers
             try
             {
                 var message = new MailMessage();
-                message.From = new MailAddress(ConfigHelper.Get<string>("MailHost"));
+                message.From = new MailAddress(ConfigHelper.Get<string>("MailUser"));
                 to.ForEach(m => {
                     message.To.Add(new MailAddress(m));
                 });

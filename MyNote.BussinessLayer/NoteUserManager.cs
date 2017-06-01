@@ -51,7 +51,7 @@ namespace MyNote.BussinessLayer
                     layerResult.Result = _repoUser.Find(m => m.Email == model.Email && m.Username == model.Username);
                     // TODO :  aktivasyon mail' i atılacak
                     string siteUri = ConfigHelper.Get<string>("SiteRootUri");
-                    string activateUri = $"{siteUri}/UserActivate/{layerResult.Result.ActivateGuid}";
+                    string activateUri = $"{siteUri}/Home/UserActivate/{layerResult.Result.ActivateGuid}";
                     string body = $"Hesabınızı aktfi etmek için <a href='{activateUri}'>tıklayınız</a>";
                     MailHelper.SendMail(body,layerResult.Result.Email,"Hesap Aktivasyon",true);
 
