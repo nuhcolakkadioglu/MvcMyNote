@@ -49,7 +49,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BussinesLayerResult.cs" />
+    <Compile Include="Results\BussinesLayerResult.cs" />
+    <Compile Include="Abstact\ManagerBase.cs" />
     <Compile Include="NoteManager.cs" />
     <Compile Include="NoteUserManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -59,6 +60,10 @@
     <ProjectReference Include="..\MyNote.Common\MyNote.Common.csproj">
       <Project>{dcacb776-1759-4c3a-b30f-83bd96fb7d04}</Project>
       <Name>MyNote.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MyNote.Core\MyNote.Core.csproj">
+      <Project>{84d6ee29-7ec2-4fbe-b449-d60ababfcbe5}</Project>
+      <Name>MyNote.Core</Name>
     </ProjectReference>
     <ProjectReference Include="..\MyNote.DataAccessLayer\MyNote.DataAccessLayer.csproj">
       <Project>{83ece1a8-fdc4-4b9c-ad25-a86dbd8fbb3a}</Project>

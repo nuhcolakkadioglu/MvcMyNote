@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MyNote.BussinessLayer
+namespace MyNote.BussinessLayer.Results
 {
   public  class BussinesLayerResult<T> where T:class
     {

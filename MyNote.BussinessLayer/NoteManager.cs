@@ -1,4 +1,5 @@
-﻿using MyNote.DataAccessLayer.EntityFramework;
+﻿using MyNote.BussinessLayer.Abstact;
+using MyNote.DataAccessLayer.EntityFramework;
 using MyNote.Enties;
 using System;
 using System.Collections.Generic;
@@ -8,18 +9,8 @@ using System.Threading.Tasks;
 
 namespace MyNote.BussinessLayer
 {
-   public class NoteManager
+   public class NoteManager:ManagerBase<Note>
     {
-        private static Repository<Note> _noteRepo = new Repository<Note>();
 
-        public static List<Note> GetAllNote()
-        {
-            return _noteRepo.List();
-        }
-
-        public static IQueryable<Note> GetAllNoteQueryable()
-        {
-            return _noteRepo.ListQueryable();
-        }
     }
 }

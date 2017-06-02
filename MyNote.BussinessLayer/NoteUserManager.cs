@@ -8,19 +8,20 @@ using MyNote.Enties;
 using MyNote.Enties.DTO;
 using MyNote.Enties.Messages;
 using MyNote.Common.Helpers;
+using MyNote.BussinessLayer.Results;
+using MyNote.BussinessLayer.Abstact;
 
 namespace MyNote.BussinessLayer
 {
-    public class NoteUserManager
+    public class NoteUserManager: ManagerBase<NoteUser>
     {
-        private static Repository<NoteUser> _repoUser = new Repository<NoteUser>();
 
         //yeni kullanıcı kayıt işlemleri
-        public static BussinesLayerResult<NoteUser> RegisterUser(RegisterViewModel model)
+        public  BussinesLayerResult<NoteUser> RegisterUser(RegisterViewModel model)
         {
             BussinesLayerResult<NoteUser> layerResult = new BussinesLayerResult<NoteUser>();
-
-            NoteUser user = _repoUser.Find(m => m.Username == model.Username || m.Email == model.Email);
+            
+            NoteUser user = Find(m => m.Username == model.Username || m.Email == model.Email);
             if (user != null)
             {
                 if (user.Username == model.Username)
@@ -36,24 +37,25 @@ namespace MyNote.BussinessLayer
             }
             else
             {
-                int dbResult = _repoUser.Insert(new NoteUser()
+                int dbResult = Insert(new NoteUser()
                 {
                     Email = model.Email,
                     Password = model.Password,
                     Username = model.Username,
                     IsActive = false,
                     ActivateGuid = Guid.NewGuid(),
-                    IsAdmin=false
+                    IsAdmin = false,
+                    ProfileImageFileName = "User.png"
                 });
 
                 if (dbResult > 0)
                 {
-                    layerResult.Result = _repoUser.Find(m => m.Email == model.Email && m.Username == model.Username);
+                    layerResult.Result = Find(m => m.Email == model.Email && m.Username == model.Username);
                     // TODO :  aktivasyon mail' i atılacak
                     string siteUri = ConfigHelper.Get<string>("SiteRootUri");
                     string activateUri = $"{siteUri}/Home/UserActivate/{layerResult.Result.ActivateGuid}";
                     string body = $"Hesabınızı aktfi etmek için <a href='{activateUri}'>tıklayınız</a>";
-                    MailHelper.SendMail(body,layerResult.Result.Email,"Hesap Aktivasyon",true);
+                    MailHelper.SendMail(body, layerResult.Result.Email, "Hesap Aktivasyon", true);
 
                 }
             }
@@ -61,12 +63,12 @@ namespace MyNote.BussinessLayer
             return layerResult;
         }
 
-        public static BussinesLayerResult<NoteUser> LoginUser(LoginViewModel model)
+        public  BussinesLayerResult<NoteUser> LoginUser(LoginViewModel model)
         {
 
 
             BussinesLayerResult<NoteUser> layerResult = new BussinesLayerResult<NoteUser>();
-            layerResult.Result = _repoUser.Find(m => m.Username == model.UserName && m.Password == model.Password);
+            layerResult.Result = Find(m => m.Username == model.UserName && m.Password == model.Password);
 
             if (layerResult.Result != null)
             {
@@ -84,21 +86,22 @@ namespace MyNote.BussinessLayer
             return layerResult;
         }
 
-        public static BussinesLayerResult<NoteUser> ActiveUser(Guid code)
+        public  BussinesLayerResult<NoteUser> ActiveUser(Guid code)
         {
             BussinesLayerResult<NoteUser> resultLayer = new BussinesLayerResult<NoteUser>();
-            resultLayer.Result = _repoUser.Find(m => m.ActivateGuid == code);
+            resultLayer.Result = Find(m => m.ActivateGuid == code);
 
-            if(resultLayer.Result!=null)
+            if (resultLayer.Result != null)
             {
-                if(resultLayer.Result.IsActive)
+                if (resultLayer.Result.IsActive)
                 {
                     resultLayer.AddError(ErrorMessageCode.KullaniciAkitf, "Üye zaten aktif");
                     return resultLayer;
                 }
                 resultLayer.Result.IsActive = true;
-                _repoUser.Update(resultLayer.Result);
-            }else
+                Update(resultLayer.Result);
+            }
+            else
             {
                 resultLayer.AddError(ErrorMessageCode.AktiveteIdyok, "Aktivete kodu yok");
 
@@ -108,18 +111,80 @@ namespace MyNote.BussinessLayer
             return resultLayer;
         }
 
-        public static BussinesLayerResult<NoteUser> GetUserById(int id)
+        public  BussinesLayerResult<NoteUser> GetUserById(int id)
         {
             BussinesLayerResult<NoteUser> resultLayer = new BussinesLayerResult<NoteUser>();
 
-            resultLayer.Result = _repoUser.Find(m => m.Id == id);
+            resultLayer.Result = Find(m => m.Id == id);
 
-            if(resultLayer.Result==null)
+            if (resultLayer.Result == null)
             {
                 resultLayer.AddError(ErrorMessageCode.KullaniciBulunamadi, "Kullanıcı bulunamadı");
             }
 
             return resultLayer;
+        }
+
+        public  BussinesLayerResult<NoteUser> UpdateProfile(NoteUser model)
+        {
+
+            NoteUser db_user = Find(m => m.Username == model.Username && m.Email == model.Email);
+            BussinesLayerResult<NoteUser> res = new BussinesLayerResult<NoteUser>();
+            if (db_user != null && db_user.Id != model.Id)
+            {
+                if (db_user.Username == model.Username)
+                {
+                    res.AddError(ErrorMessageCode.KullaniciAdiZatenVar, "kullanıcı adı kayıtlı");
+                }
+                if (db_user.Email == model.Email)
+                {
+                    res.AddError(ErrorMessageCode.EmailKayitli, "eposta adresi kayıtlı");
+
+                }
+                return res;
+            }
+
+            res.Result = Find(m => m.Id == model.Id);
+            res.Result.Email = model.Email;
+            res.Result.Name = model.Name;
+            res.Result.Surname = model.Surname;
+            res.Result.Password = model.Password;
+            res.Result.Username = model.Username;
+
+            if (string.IsNullOrEmpty(model.ProfileImageFileName) == false)
+            {
+                res.Result.ProfileImageFileName = model.ProfileImageFileName;
+            }
+            if (Update(res.Result) == 0)
+            {
+                res.AddError(ErrorMessageCode.profilGuncellenemedi, "Profil güncellenemedi");
+            }
+
+            return res;
+        }
+
+        public  BussinesLayerResult<NoteUser> RemoveUser(int Id)
+        {
+
+            BussinesLayerResult<NoteUser> res = new BussinesLayerResult<NoteUser>();
+            NoteUser user = Find(m => m.Id == Id);
+
+            if (user != null)
+            {
+                if (Delete(user) == 0)
+                {
+                    res.AddError(ErrorMessageCode.KullanicSilinemedi, "kullanıcı silinemedi");
+                    return res;
+                }
+            }
+            else
+            {
+                res.AddError(ErrorMessageCode.KullaniciBulunamadi, "kullanıcı bulunamadı");
+
+            }
+
+            return res;
+
         }
     }
 }

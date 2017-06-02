@@ -1,7 +1,9 @@
 ﻿using MyNote.BussinessLayer;
+using MyNote.BussinessLayer.Results;
 using MyNote.Enties;
 using MyNote.Enties.DTO;
 using MyNote.Enties.Messages;
+using MyNote.Web.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,6 +16,10 @@ namespace MyNote.Web.Controllers
     public class HomeController : Controller
     {
         // GET: Hom
+        private CategoryManager categoryManager = new CategoryManager();
+        private NoteUserManager noteUserManager = new NoteUserManager();
+        private NoteManager noteManager = new NoteManager();
+
         public ActionResult Index()
         {
             //if (TempData["mm"]!=null)
@@ -22,7 +28,7 @@ namespace MyNote.Web.Controllers
 
             //}
 
-            return View(NoteManager.GetAllNote().OrderByDescending(m => m.Modified).ToList());
+            return View(noteManager.ListQueryable().OrderByDescending(m => m.Modified).ToList());
         }
 
         public ActionResult ByCategory(int? id)
@@ -30,17 +36,17 @@ namespace MyNote.Web.Controllers
             if (id == null)
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
 
-            Category cat = CategoryManager.GetCategoryById(id.Value);
+            Category cat = categoryManager.Find(m => m.Id == id);
             if (cat == null)
                 return HttpNotFound();
 
-            return View("Index",cat.Notes.OrderByDescending(m=>m.Modified).ToList());
+            return View("Index", cat.Notes.OrderByDescending(m => m.Modified).ToList());
         }
 
         public ActionResult EnBegeni()
         {
 
-            return View("Index",NoteManager.GetAllNote().OrderByDescending(m => m.LikeCount).ToList());
+            return View("Index", noteManager.ListQueryable().OrderByDescending(m => m.LikeCount).ToList());
         }
 
         public ActionResult Hakkimda()
@@ -57,16 +63,16 @@ namespace MyNote.Web.Controllers
         [HttpPost]
         public ActionResult Login(LoginViewModel model)
         {
-           
-            if(ModelState.IsValid)
+
+            if (ModelState.IsValid)
             {
-                BussinesLayerResult<NoteUser> user = NoteUserManager.LoginUser(model);
+                BussinesLayerResult<NoteUser> user = noteUserManager.LoginUser(model);
                 NoteUser session = user.Result;
                 if (user.Errors.Count > 0)
                 {
                     user.Errors.ForEach(m => ModelState.AddModelError("", m.Message));
 
-                    if(user.Errors.Find(m => m.Code == ErrorMessageCode.UserAktifDegil)!=null)
+                    if (user.Errors.Find(m => m.Code == ErrorMessageCode.UserAktifDegil) != null)
                     {
                         ViewBag.Link = "/Home/UserActivate";
                     }
@@ -76,7 +82,7 @@ namespace MyNote.Web.Controllers
                 Session["login"] = session;
                 return RedirectToAction("Index");
             }
-            
+
             return View();
         }
 
@@ -96,66 +102,79 @@ namespace MyNote.Web.Controllers
         public ActionResult Register(RegisterViewModel model)
         {
 
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 BussinesLayerResult<NoteUser> user = new BussinesLayerResult<NoteUser>();
-                user = NoteUserManager.RegisterUser(model);
+                user = noteUserManager.RegisterUser(model);
 
-                if(user.Errors.Count>0)
+                if (user.Errors.Count > 0)
                 {
                     user.Errors.ForEach(m => ModelState.AddModelError("", m.Message));
                     return View(model);
                 }
-             
-                return RedirectToAction("RegisterOk");
+                OkViewModel okModel = new OkViewModel();
+                okModel.Title = "Kayıt Başarılı";
+                okModel.Header = "Kayıt oldunuz";
+                okModel.RedirectingUrl = "/Home/Login";
+                okModel.Items.Add("Eposta adresinize gönderilen aktivasyon linki ile hesabınızı lütfen aktif ediniz.");
+
+                return View("Ok", okModel);
             }
 
-           
+
             return View(model);
         }
 
-        public ActionResult RegisterOk()
-        {
-            return View();
-        }
+
 
         public ActionResult UserActivate(Guid id)
         {
-           BussinesLayerResult<NoteUser> user =   NoteUserManager.ActiveUser(id);
-            if(user.Errors.Count>0)
+            BussinesLayerResult<NoteUser> user = noteUserManager.ActiveUser(id);
+            if (user.Errors.Count > 0)
             {
-                TempData["errors"] = user.Errors;
-                return RedirectToAction("UserActivateCancel");
+                ErrorViewModel errorModel = new ErrorViewModel()
+                {
+                    Header = "Hesap geçersiz",
+                    Title = "Geçersiz İşlem",
+                    Items = user.Errors
+
+                };
+
+                return View("Error", errorModel);
             }
 
-            return RedirectToAction("UserActivateOk");
-        }
-
-        public ActionResult UserActivateCancel()
-        {
-            List<ErrorMessageObj> error = null;
-            if (TempData["errors"]!=null)
+            OkViewModel OkViewModel = new OkViewModel()
             {
-                error = TempData["errors"] as List<ErrorMessageObj>;
-            }
-            return View(error);
+                Title = "Hesabınız Aktif Edilmiştir",
+                RedirectingUrl = "/Home/Login"
+
+            };
+            OkViewModel.Items.Add("Hesabınız Aktif Edilmiştir");
+            return View("Ok", OkViewModel);
         }
 
-        public ActionResult UserActivateOk()
-        {
-
-            return View();
-        }
 
 
         public ActionResult ShowProfile()
         {
-            NoteUser user = Session["login"] as NoteUser;
-            BussinesLayerResult<NoteUser> res = NoteUserManager.GetUserById(user.Id);
+            BussinesLayerResult<NoteUser> res = null;
+            NoteUser user = null;
 
-            if(res.Errors.Count>0)
+            if (Session["login"] != null)
+                user = Session["login"] as NoteUser;
+
+            if (user != null)
+                res = noteUserManager.GetUserById(user.Id);
+
+            if (res.Errors.Count > 0)
             {
-                //hata sayfası
+                ErrorViewModel errorModel = new ErrorViewModel()
+                {
+                    Title = "Kullanıcı bulunamadı",
+                    Items = res.Errors
+                };
+
+                return View("Error", errorModel);
             }
 
             return View(res.Result);
@@ -163,18 +182,88 @@ namespace MyNote.Web.Controllers
 
         public ActionResult EditProfile()
         {
-            return View();
+            BussinesLayerResult<NoteUser> res = null;
+            NoteUser user = null;
+
+            if (Session["login"] != null)
+            {
+                user = Session["login"] as NoteUser;
+
+
+                if (user != null)
+                    res = noteUserManager.GetUserById(user.Id);
+
+                if (res.Errors.Count > 0)
+                {
+                    ErrorViewModel errorModel = new ErrorViewModel()
+                    {
+                        Title = "lütfen önce oturum açınız",
+                        Items = res.Errors
+                    };
+                    return View("Error", errorModel);
+                }
+            }
+
+            return View(res.Result);
         }
 
         [HttpPost]
-        public ActionResult EditProfile(NoteUser model)
+        public ActionResult EditProfile(NoteUser model, HttpPostedFileBase ProfileImageFileName)
         {
-            return View();
+            ModelState.Remove("ModifiedUsername");
+
+            if(ModelState.IsValid)
+            {
+                if (ProfileImageFileName != null &&
+                (ProfileImageFileName.ContentType == "image/jpeg") || ProfileImageFileName.ContentType == "image/jpg" ||
+                    ProfileImageFileName.ContentType == "iamage/png")
+                {
+                    string filename = $"user_{model.Id}.{ProfileImageFileName.ContentType.Split('/')[1]}";
+                    ProfileImageFileName.SaveAs(Server.MapPath($"~/Images/{filename}"));
+                    model.ProfileImageFileName = filename;
+                }
+
+                BussinesLayerResult<NoteUser> res = noteUserManager.UpdateProfile(model);
+
+                if (res.Errors.Count > 0)
+                {
+                    ErrorViewModel messages = new ErrorViewModel()
+                    {
+                        Items = res.Errors,
+                        Title = "profil güncellenemedi",
+                        RedirectingUrl = "/Home/EditProfile"
+                    };
+                    return View("Error", messages);
+                }
+                NoteUser session = new NoteUser();
+                session = res.Result;
+                Session["login"] = session;
+
+
+                return RedirectToAction("ShowProfile");
+            }
+
+            return View(model);
         }
 
-        public ActionResult RemoveProfile()
+        public ActionResult DeleteProfile()
         {
-            return View();
+            NoteUser currentUser = Session["login"] as NoteUser;
+
+            BussinesLayerResult<NoteUser> res = noteUserManager.RemoveUser(currentUser.Id);
+
+            if(res.Errors.Count>0)
+            {
+                ErrorViewModel errorModel = new ErrorViewModel()
+                {
+                    Items =res.Errors,
+                    Title="Profil silinemedi",
+                    RedirectingUrl= "/Home/ShowProfile"
+                };
+                return View("Error",errorModel);
+            }
+
+            return RedirectToAction("Login");
         }
 
     }

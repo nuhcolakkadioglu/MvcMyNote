@@ -1,54 +1,56 @@
-﻿
+﻿using MyNote.Core.DataAccess;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Linq.Expressions;
-using MyNote.Core.DataAccess;
+using MyNote.DataAccessLayer.EntityFramework;
 
-namespace MyNote.DataAccessLayer.MySql
+namespace MyNote.BussinessLayer.Abstact
 {
-    public class Repository<T> : RepositoryBase, IDataAccess<T> where T : class
+    public abstract class ManagerBase<T> : IDataAccess<T> where T:class
     {
+        private Repository<T> repo = new Repository<T>();
+
         public int Delete(T model)
         {
-            throw new NotImplementedException();
+            return repo.Delete(model);
         }
 
         public T Find(Expression<Func<T, bool>> predicate)
         {
-            throw new NotImplementedException();
+            return repo.Find(predicate);
         }
 
         public int Insert(T model)
         {
-            throw new NotImplementedException();
+            return repo.Insert(model);
         }
 
         public List<T> List()
         {
-            throw new NotImplementedException();
+            return repo.List();
         }
 
         public List<T> List(Expression<Func<T, bool>> predicate)
         {
-            throw new NotImplementedException();
+            return repo.List(predicate);
         }
 
         public IQueryable<T> ListQueryable()
         {
-            throw new NotImplementedException();
+            return repo.ListQueryable();
         }
 
         public int Save()
         {
-            throw new NotImplementedException();
+            return repo.Save();
         }
 
         public int Update(T model)
         {
-            throw new NotImplementedException();
+            return repo.Update(model);
         }
     }
 }
