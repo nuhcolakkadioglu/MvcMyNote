@@ -8,32 +8,30 @@ using System.Web;
 using System.Web.Mvc;
 using MyNote.Enties;
 using MyNote.BussinessLayer;
-using MyNote.Web.Models;
+using MyNote.BussinessLayer.Results;
 
 namespace MyNote.Web.Controllers
 {
-    public class CategoryController : Controller
+    public class UserController : Controller
     {
-        CategoryManager categoryManager = new CategoryManager();
-
+        private NoteUserManager noteuserManager = new NoteUserManager();
         public ActionResult Index()
         {
-            return View(categoryManager.List());
+            return View(noteuserManager.List());
         }
 
-        
         public ActionResult Details(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Category category = categoryManager.Find(m=>m.Id==id);
-            if (category == null)
+            NoteUser noteUser = noteuserManager.Find(m=>m.Id==id);
+            if (noteUser == null)
             {
                 return HttpNotFound();
             }
-            return View(category);
+            return View(noteUser);
         }
 
         public ActionResult Create()
@@ -44,79 +42,86 @@ namespace MyNote.Web.Controllers
         
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create( Category category)
+        public ActionResult Create(NoteUser noteUser)
         {
             ModelState.Remove("ModifiedUsername");
 
             if (ModelState.IsValid)
             {
-                categoryManager.Insert(category);
-                CacheHelper.Remove("category-cahce");
+
+                BussinesLayerResult<NoteUser> res = noteuserManager.Insert(noteUser);
+
+                if(res.Errors.Count>0)
+                {
+                    res.Errors.ForEach(m => ModelState.AddModelError("", m.Message));
+                    return View(noteUser);
+                }
+
                 return RedirectToAction("Index");
             }
 
-            return View(category);
+            return View(noteUser);
         }
 
-        
         public ActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Category category = categoryManager.Find(m => m.Id == id);
-            if (category == null)
+            NoteUser noteUser = noteuserManager.Find(m=>m.Id==id);
+            if (noteUser == null)
             {
                 return HttpNotFound();
             }
-            return View(category);
+            return View(noteUser);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit( Category category)
+        public ActionResult Edit( NoteUser noteUser)
         {
             ModelState.Remove("ModifiedUsername");
 
             if (ModelState.IsValid)
             {
-                Category cat = categoryManager.Find(m=>m.Id==category.Id);
-                cat.Description = category.Description;
-                cat.Title = category.Title;
+                BussinesLayerResult<NoteUser> res = noteuserManager.Update(noteUser);
 
-                categoryManager.Update(cat);
-                CacheHelper.Remove("category-cahce");
+                if(res.Errors.Count>0)
+                {
+                    res.Errors.ForEach(m => ModelState.AddModelError("", m.Message));
+                    return View(noteUser);
+                }
+
+
                 return RedirectToAction("Index");
             }
-            return View(category);
+            return View(noteUser);
         }
 
-      
         public ActionResult Delete(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Category category = categoryManager.Find(m=>m.Id==id);
-            if (category == null)
+            NoteUser noteUser = noteuserManager.Find(m=>m.Id==id);
+            if (noteUser == null)
             {
                 return HttpNotFound();
             }
-            return View(category);
+            return View(noteUser);
         }
 
-       
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Category category = categoryManager.Find(m => m.Id == id);
-            categoryManager.Delete(category);
-            CacheHelper.Remove("category-cahce");
+            NoteUser noteUser = noteuserManager.Find(m => m.Id == id);
+            noteuserManager.Delete(noteUser);
             return RedirectToAction("Index");
         }
 
+ 
     }
 }

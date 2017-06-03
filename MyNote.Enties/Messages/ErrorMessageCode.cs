@@ -14,6 +14,7 @@ namespace MyNote.Enties.Messages
         AktiveteIdyok=181,
         KullaniciBulunamadi=182,
         profilGuncellenemedi =183,
-        KullanicSilinemedi = 184
+        KullanicSilinemedi = 184,
+        KullaniciEklenemedi = 185
     }
 }

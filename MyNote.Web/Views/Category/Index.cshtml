@@ -1,5 +1,4 @@
 ﻿@model IEnumerable<MyNote.Enties.Category>
-
 @{
     ViewBag.Title = "Index";
 }
@@ -59,20 +58,14 @@
                         @Html.DisplayFor(modelItem => item.ModifiedUsername)
                     </td>
                     <td>
-                        <a href="/Category/Edit/@item.Id" class="btn btn-warning btn-xs" title="Düzenle">
-                            <span class="glyphicon glyphicon-edit"></span>
-                            
-                        </a>
 
-                        <a href="/Category/Details/@item.Id" class="btn btn-info btn-xs" title="Detay">
-                            <span class="glyphicon glyphicon-search"></span>
-                            
-                        </a>
+                        @Bootstrap.LinkButton("/Category/Edit/"+ item.Id, "warning", "btn-xs","Düzenle","edit","")
 
-                        <a href="/Category/Delete/@item.Id" class="btn btn-danger btn-xs" title="Sil">
-                            <span class="glyphicon glyphicon-trash"></span>
-                            
-                        </a>
+                        @Bootstrap.LinkButton("/Category/Details/" + item.Id, "info", "btn-xs", "Detay", "search", "")
+
+                        @Bootstrap.LinkButton("/Category/Edit/" + item.Id, "danger", "btn-xs", "Sil", "trash", "")
+
+                      
                       
                     </td>
                 </tr>

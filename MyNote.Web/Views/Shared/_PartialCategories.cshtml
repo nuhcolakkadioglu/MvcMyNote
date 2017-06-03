@@ -1,13 +1,14 @@
-﻿@using MyNote.BussinessLayer
+﻿@using MyNote.Web.Models
 @using MyNote.Enties
 @{ 
-    CategoryManager categoryManager = new CategoryManager();
+    List<Category> categoryManager = CacheHelper.GetCategoryesFromCache();
+
 }
 <p class="lead">Kategoriler</p>
 <div class="list-group">
     <a href="/Home/Index" class="list-group-item"><span class="glyphicon glyphicon-arrow-right"></span>Tümü</a>
 
-    @foreach (Category item in categoryManager.List())
+    @foreach (Category item in categoryManager)
     {
         <a href="@Url.Action("ByCategory", "Home", new { id = item.Id })" title="@item.Description" class="list-group-item"><span class="glyphicon glyphicon-arrow-right"></span>@item.Title</a>
     }

@@ -1,6 +1,6 @@
 ﻿@using MyNote.Enties
 @using MyNote.BussinessLayer
-
+@using MyNote.Web.Models;
 <!DOCTYPE html>
 <html>
 <head>
@@ -25,13 +25,7 @@
 </head>
 <body>
     @{
-        NoteUser   user = null;
-
-        if (Session["login"] != null)
-        {
-            user = Session["login"] as NoteUser;
-       
-        }
+        NoteUser user = CurrentSession.User;
     }
     <!-- Navigation -->
     <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
@@ -56,11 +50,11 @@
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-wrench"></span>&nbsp; Yönetim <span class="caret"></span> </a>
                             <ul class="dropdown-menu">
-                                <li><a href="/Note/Yeni"><span class="glyphicon glyphicon-plus"></span> Not Ekle</a></li>
+                                <li><a href="/Note/Create"><span class="glyphicon glyphicon-plus"></span> Not Ekle</a></li>
 
                                 <li role="separator" class="divider"></li>
 
-                                <li><a href="/Note/Notlarim"><span class="glyphicon glyphicon-th-list"></span> Notlarım</a></li>
+                                <li><a href="/Note/Index"><span class="glyphicon glyphicon-th-list"></span> Notlarım</a></li>
 
                                 <li><a href="/Note/Begendiklerim"><span class="glyphicon glyphicon-heart"></span> Begendiklerim</a></li>
                                 <li role="separator" class="divider"></li>
@@ -70,6 +64,12 @@
                                     <li><a href="/Category/Create"><span class="glyphicon glyphicon-plus"></span> Kategori Ekle</a></li>
 
                                 <li><a href="/Category/Index"><span class="glyphicon glyphicon-th-list"></span> Kategoriler</a></li>
+
+                                <li role="separator" class="divider"></li>
+                                <li><a href="/User/Create"><span class="glyphicon glyphicon-plus"></span> Kullanıcı Ekle</a></li>
+
+                                <li><a href="/User/Index"><span class="glyphicon glyphicon-th-list"></span> Kullanıcılar</a></li>
+
                               }
 
                             </ul>

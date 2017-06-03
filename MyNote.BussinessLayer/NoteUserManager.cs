@@ -37,7 +37,7 @@ namespace MyNote.BussinessLayer
             }
             else
             {
-                int dbResult = Insert(new NoteUser()
+                int dbResult = base.Insert(new NoteUser()
                 {
                     Email = model.Email,
                     Password = model.Password,
@@ -155,7 +155,7 @@ namespace MyNote.BussinessLayer
             {
                 res.Result.ProfileImageFileName = model.ProfileImageFileName;
             }
-            if (Update(res.Result) == 0)
+            if (base.Update(res.Result) == 0)
             {
                 res.AddError(ErrorMessageCode.profilGuncellenemedi, "Profil güncellenemedi");
             }
@@ -185,6 +185,79 @@ namespace MyNote.BussinessLayer
 
             return res;
 
+        }
+
+        public new  BussinesLayerResult<NoteUser> Insert(NoteUser model)
+        {
+            BussinesLayerResult<NoteUser> layerResult = new BussinesLayerResult<NoteUser>();
+
+            NoteUser user = Find(m => m.Username == model.Username || m.Email == model.Email);
+
+            layerResult.Result = model;
+
+            if (user != null)
+            {
+                if (user.Username == model.Username)
+                {
+                    layerResult.AddError(ErrorMessageCode.KullaniciAdiZatenVar, "kullanıcı adı kayıtlı");
+                }
+
+                if (user.Email == model.Email)
+                {
+                    layerResult.AddError(ErrorMessageCode.EmailKayitli, "Email  kayıtlı");
+                }
+
+            }
+            else
+            {
+                layerResult.Result.ProfileImageFileName = "";
+                layerResult.Result.ActivateGuid = Guid.NewGuid();
+
+               if(base.Insert(layerResult.Result)==0)
+                {
+                    layerResult.AddError(ErrorMessageCode.KullaniciEklenemedi, "Kullanıcı Eklenemedi");
+
+                }
+            }
+
+            return layerResult;
+        }
+
+        public new BussinesLayerResult<NoteUser> Update(NoteUser model)
+        {
+            NoteUser db_user = Find(m => m.Username == model.Username && m.Email == model.Email);
+            BussinesLayerResult<NoteUser> res = new BussinesLayerResult<NoteUser>();
+            res.Result = model;
+            if (db_user != null && db_user.Id != model.Id)
+            {
+                if (db_user.Username == model.Username)
+                {
+                    res.AddError(ErrorMessageCode.KullaniciAdiZatenVar, "kullanıcı adı kayıtlı");
+                }
+                if (db_user.Email == model.Email)
+                {
+                    res.AddError(ErrorMessageCode.EmailKayitli, "eposta adresi kayıtlı");
+
+                }
+                return res;
+            }
+
+            res.Result = Find(m => m.Id == model.Id);
+            res.Result.Email = model.Email;
+            res.Result.Name = model.Name;
+            res.Result.Surname = model.Surname;
+            res.Result.Password = model.Password;
+            res.Result.Username = model.Username;
+            res.Result.IsActive = model.IsActive;
+            res.Result.IsAdmin = model.IsAdmin;
+
+            
+            if (base.Update(res.Result) == 0)
+            {
+                res.AddError(ErrorMessageCode.profilGuncellenemedi, "Profil güncellenemedi");
+            }
+
+            return res;
         }
     }
 }

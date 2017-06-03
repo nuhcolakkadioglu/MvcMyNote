@@ -21,10 +21,10 @@ namespace MyNote.Enties
         public string Email { get; set; }
         [Required, StringLength(100)]
         public string Password { get; set; }
-        [Required]
+        [Required, ScaffoldColumn(false)]
         public Guid ActivateGuid { get; set; }
 
-
+        [ScaffoldColumn(false)]
         public string ProfileImageFileName { get; set; } 
 
         public bool IsActive { get; set; }

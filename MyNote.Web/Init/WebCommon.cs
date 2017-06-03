@@ -1,6 +1,7 @@
 ﻿using MyNote.BussinessLayer;
 using MyNote.Common;
 using MyNote.Enties;
+using MyNote.Web.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,9 +13,9 @@ namespace MyNote.Web.Init
     {
         public string GetUserName()
         {
-            if(HttpContext.Current.Session["login"] !=null)
+            if(CurrentSession.User !=null)
             {
-                NoteUser user = HttpContext.Current.Session["login"] as NoteUser;
+                NoteUser user = CurrentSession.User;
                 return user.Username;
             }
            

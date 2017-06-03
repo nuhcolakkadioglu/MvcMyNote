@@ -3,6 +3,7 @@ using MyNote.BussinessLayer.Results;
 using MyNote.Enties;
 using MyNote.Enties.DTO;
 using MyNote.Enties.Messages;
+using MyNote.Web.Models;
 using MyNote.Web.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -79,7 +80,7 @@ namespace MyNote.Web.Controllers
 
                     return View(model);
                 }
-                Session["login"] = session;
+                CurrentSession.Set<NoteUser>("login", session);
                 return RedirectToAction("Index");
             }
 
@@ -157,14 +158,8 @@ namespace MyNote.Web.Controllers
 
         public ActionResult ShowProfile()
         {
-            BussinesLayerResult<NoteUser> res = null;
-            NoteUser user = null;
 
-            if (Session["login"] != null)
-                user = Session["login"] as NoteUser;
-
-            if (user != null)
-                res = noteUserManager.GetUserById(user.Id);
+            BussinesLayerResult<NoteUser> res = noteUserManager.GetUserById(CurrentSession.User.Id);
 
             if (res.Errors.Count > 0)
             {
@@ -182,27 +177,19 @@ namespace MyNote.Web.Controllers
 
         public ActionResult EditProfile()
         {
-            BussinesLayerResult<NoteUser> res = null;
-            NoteUser user = null;
+            BussinesLayerResult<NoteUser> res = noteUserManager.GetUserById(CurrentSession.User.Id);
 
-            if (Session["login"] != null)
+
+            if (res.Errors.Count > 0)
             {
-                user = Session["login"] as NoteUser;
-
-
-                if (user != null)
-                    res = noteUserManager.GetUserById(user.Id);
-
-                if (res.Errors.Count > 0)
+                ErrorViewModel errorModel = new ErrorViewModel()
                 {
-                    ErrorViewModel errorModel = new ErrorViewModel()
-                    {
-                        Title = "lütfen önce oturum açınız",
-                        Items = res.Errors
-                    };
-                    return View("Error", errorModel);
-                }
+                    Title = "lütfen önce oturum açınız",
+                    Items = res.Errors
+                };
+                return View("Error", errorModel);
             }
+
 
             return View(res.Result);
         }
@@ -212,7 +199,7 @@ namespace MyNote.Web.Controllers
         {
             ModelState.Remove("ModifiedUsername");
 
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 if (ProfileImageFileName != null &&
                 (ProfileImageFileName.ContentType == "image/jpeg") || ProfileImageFileName.ContentType == "image/jpg" ||
@@ -237,7 +224,7 @@ namespace MyNote.Web.Controllers
                 }
                 NoteUser session = new NoteUser();
                 session = res.Result;
-                Session["login"] = session;
+                CurrentSession.Set<NoteUser>("login", session);
 
 
                 return RedirectToAction("ShowProfile");
@@ -248,19 +235,18 @@ namespace MyNote.Web.Controllers
 
         public ActionResult DeleteProfile()
         {
-            NoteUser currentUser = Session["login"] as NoteUser;
-
+            NoteUser currentUser = CurrentSession.User;
             BussinesLayerResult<NoteUser> res = noteUserManager.RemoveUser(currentUser.Id);
 
-            if(res.Errors.Count>0)
+            if (res.Errors.Count > 0)
             {
                 ErrorViewModel errorModel = new ErrorViewModel()
                 {
-                    Items =res.Errors,
-                    Title="Profil silinemedi",
-                    RedirectingUrl= "/Home/ShowProfile"
+                    Items = res.Errors,
+                    Title = "Profil silinemedi",
+                    RedirectingUrl = "/Home/ShowProfile"
                 };
-                return View("Error",errorModel);
+                return View("Error", errorModel);
             }
 
             return RedirectToAction("Login");

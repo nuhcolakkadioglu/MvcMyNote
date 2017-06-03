@@ -13,42 +13,42 @@ namespace MyNote.BussinessLayer.Abstact
     {
         private Repository<T> repo = new Repository<T>();
 
-        public int Delete(T model)
+        public virtual int Delete(T model)
         {
             return repo.Delete(model);
         }
 
-        public T Find(Expression<Func<T, bool>> predicate)
+        public virtual T Find(Expression<Func<T, bool>> predicate)
         {
             return repo.Find(predicate);
         }
 
-        public int Insert(T model)
+        public virtual int Insert(T model)
         {
             return repo.Insert(model);
         }
 
-        public List<T> List()
+        public virtual List<T> List()
         {
             return repo.List();
         }
 
-        public List<T> List(Expression<Func<T, bool>> predicate)
+        public virtual List<T> List(Expression<Func<T, bool>> predicate)
         {
             return repo.List(predicate);
         }
 
-        public IQueryable<T> ListQueryable()
+        public virtual IQueryable<T> ListQueryable()
         {
             return repo.ListQueryable();
         }
 
-        public int Save()
+        public virtual int Save()
         {
             return repo.Save();
         }
 
-        public int Update(T model)
+        public virtual int Update(T model)
         {
             return repo.Update(model);
         }
