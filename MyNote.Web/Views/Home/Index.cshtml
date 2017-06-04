@@ -40,7 +40,7 @@
         <div class="row">
             @foreach (Note item in Model)
             {
-                <div class="col-sm-4 col-lg-4 col-md-4">
+                <div class="col-sm-4 col-lg-4 col-md-4" data-note-id="@item.Id">
                     <div class="thumbnail">
                         <img src="http://placehold.it/320x150" alt="@item.Title">
                         <div class="caption">
@@ -67,13 +67,14 @@
                             <div><hr /></div>
                             <div class="ratings">
                                 <p class="pull-right">
-                                    <button class="btn btn-default btn-sm">
+                                    <button class="btn btn-default btn-sm" data-toggle="modal" data-target="#modalYorum" data-note-id="@item.Id">
                                         <span class="glyphicon glyphicon-comment"></span>Yorumlar
                                     </button>
                                 </p>
                                 <p>
-                                    <button type="button" class="btn btn-default btn-sm">
-                                        <span class="glyphicon glyphicon-star-empty"></span>@item.LikeCount
+                                    <button data-liked="false" data-note-id="@item.Id" type="button" class="btn btn-default btn-sm">
+                                        <span class="glyphicon glyphicon-star-empty"></span>
+                                      &nbsp;  <span class="like-count">@item.LikeCount</span>
                                     </button>
 
                                 </p>
@@ -89,3 +90,32 @@
 @section footer{
 @Html.Partial("_PartialFooter")    
 }
+
+<script src="~/Scripts/comment.js"></script>
+@Bootstrap.ModalPopup(id: "modalYorum", title:"Yorumlar");
+
+
+@*<script src="~/Scripts/comment.js"></script>
+<script src="~/Scripts/jquery-3.1.1.js"></script>*@
+
+@*<script>
+    $(function () {
+
+        var notdis = [];
+        $("div[ data-note-id]").each(function (i, e) {
+           
+            notdis.push($(e).data("note-id"));
+        });
+
+        $.ajax({
+            method: "POST",
+            url: "/Note/GetLiked",
+            data: { ids: notdis }
+        }).done(function (data) {
+
+        }).fail(function (e) {
+            alert("sunucu erişim hatası");
+        });
+
+    });
+</script>*@

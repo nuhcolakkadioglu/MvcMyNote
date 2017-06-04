@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 using System.Data.Entity;
 using MyNote.Enties;
 
-namespace MyNote.DataAccessLayer.EntityFramework
+namespace MyNote.DataAccessLayer.MySql
 {
-    public class MyInitializer : CreateDatabaseIfNotExists<DatabaseContext>
+    public class MyInitializerMySQL : CreateDatabaseIfNotExists<DatabaseContextMySQL>
     {
-        protected override void Seed(DatabaseContext context)
+        protected override void Seed(DatabaseContextMySQL context)
         {
             NoteUser admin = new NoteUser()
             {

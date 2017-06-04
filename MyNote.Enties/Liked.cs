@@ -14,7 +14,7 @@ namespace MyNote.Enties
         [Key,DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
-        public Note Note { get; set; }
-        public NoteUser NoteUser { get; set; }
+        public virtual Note Note { get; set; }
+        public virtual NoteUser LikedUser { get; set; }
     }
 }

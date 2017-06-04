@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Linq.Expressions;
-using MyNote.DataAccessLayer.EntityFramework;
+using MyNote.DataAccessLayer.MySql;
 
 namespace MyNote.BussinessLayer.Abstact
 {
