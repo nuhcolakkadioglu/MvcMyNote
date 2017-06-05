@@ -3,6 +3,7 @@ using MyNote.BussinessLayer.Results;
 using MyNote.Enties;
 using MyNote.Enties.DTO;
 using MyNote.Enties.Messages;
+using MyNote.Web.Filters;
 using MyNote.Web.Models;
 using MyNote.Web.ViewModels;
 using System;
@@ -14,6 +15,7 @@ using System.Web.Mvc;
 
 namespace MyNote.Web.Controllers
 {
+    [ErrorFil]
     public class HomeController : Controller
     {
         // GET: Hom
@@ -28,7 +30,7 @@ namespace MyNote.Web.Controllers
             //    return View(TempData["mm"] as List<Note>);
 
             //}
-
+           
             return View(noteManager.ListQueryable().OrderByDescending(m => m.Modified).ToList());
         }
 
@@ -155,7 +157,7 @@ namespace MyNote.Web.Controllers
         }
 
 
-
+        [Auth]
         public ActionResult ShowProfile()
         {
 
@@ -175,6 +177,7 @@ namespace MyNote.Web.Controllers
             return View(res.Result);
         }
 
+        [Auth]
         public ActionResult EditProfile()
         {
             BussinesLayerResult<NoteUser> res = noteUserManager.GetUserById(CurrentSession.User.Id);
@@ -194,7 +197,7 @@ namespace MyNote.Web.Controllers
             return View(res.Result);
         }
 
-        [HttpPost]
+        [HttpPost, Auth]
         public ActionResult EditProfile(NoteUser model, HttpPostedFileBase ProfileImageFileName)
         {
             ModelState.Remove("ModifiedUsername");
@@ -233,6 +236,7 @@ namespace MyNote.Web.Controllers
             return View(model);
         }
 
+        [Auth]
         public ActionResult DeleteProfile()
         {
             NoteUser currentUser = CurrentSession.User;
@@ -252,5 +256,15 @@ namespace MyNote.Web.Controllers
             return RedirectToAction("Login");
         }
 
+
+        public ActionResult ErisimHatasi()
+        {
+            return View();
+        }
+        public ActionResult ErrorFil()
+        {
+            return View();
+        }
+        
     }
 }

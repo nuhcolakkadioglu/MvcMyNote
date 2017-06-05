@@ -1,5 +1,6 @@
 ﻿using MyNote.BussinessLayer;
 using MyNote.Enties;
+using MyNote.Web.Filters;
 using MyNote.Web.Models;
 using System;
 using System.Collections.Generic;
@@ -9,6 +10,7 @@ using System.Web.Mvc;
 
 namespace MyNote.Web.Controllers
 {
+    [ErrorFil]
     public class CommentController : Controller
     {
         private NoteManager notManager = new NoteManager();
@@ -29,7 +31,7 @@ namespace MyNote.Web.Controllers
             return PartialView("_PartialComments", not.Comments.ToList());
         }
 
-        [HttpPost]
+        [HttpPost, Auth]
         public ActionResult Edit(int? id, string text)
         {
             if (id == null)
@@ -52,7 +54,7 @@ namespace MyNote.Web.Controllers
 
 
         }
-
+        [Auth]
         public ActionResult Delete(int? id)
         {
 
@@ -72,7 +74,7 @@ namespace MyNote.Web.Controllers
                 return Json(new { result = false }, JsonRequestBehavior.AllowGet);
 
         }
-
+        [Auth]
         public ActionResult Create(Comment model,int? noteid)
         {
             ModelState.Remove("ModifiedUsername");

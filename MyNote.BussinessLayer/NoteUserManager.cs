@@ -228,7 +228,7 @@ namespace MyNote.BussinessLayer
             NoteUser db_user = Find(m => m.Username == model.Username && m.Email == model.Email);
             BussinesLayerResult<NoteUser> res = new BussinesLayerResult<NoteUser>();
             res.Result = model;
-            if (db_user != null && db_user.Id != model.Id)
+            if (db_user != null && db_user.Id == model.Id)
             {
                 if (db_user.Username == model.Username)
                 {

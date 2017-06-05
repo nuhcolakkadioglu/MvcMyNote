@@ -9,9 +9,11 @@ using System.Web.Mvc;
 using MyNote.Enties;
 using MyNote.BussinessLayer;
 using MyNote.BussinessLayer.Results;
+using MyNote.Web.Filters;
 
 namespace MyNote.Web.Controllers
 {
+    [ErrorFil]
     public class UserController : Controller
     {
         private NoteUserManager noteuserManager = new NoteUserManager();

@@ -9,14 +9,17 @@ using System.Web.Mvc;
 using MyNote.Enties;
 using MyNote.Web.Models;
 using MyNote.BussinessLayer;
+using MyNote.Web.Filters;
 
 namespace MyNote.Web.Controllers
 {
+    [Auth, ErrorFil]
     public class NoteController : Controller
     {
         private NoteManager noteManager = new NoteManager();
         private CategoryManager categoryManager = new CategoryManager();
 
+ 
         public ActionResult Index()
         {
 

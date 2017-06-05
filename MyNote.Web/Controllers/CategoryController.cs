@@ -9,9 +9,11 @@ using System.Web.Mvc;
 using MyNote.Enties;
 using MyNote.BussinessLayer;
 using MyNote.Web.Models;
+using MyNote.Web.Filters;
 
 namespace MyNote.Web.Controllers
 {
+    [Auth, AuthAdmin, ErrorFil]
     public class CategoryController : Controller
     {
         CategoryManager categoryManager = new CategoryManager();

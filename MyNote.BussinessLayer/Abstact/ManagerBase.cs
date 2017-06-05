@@ -7,8 +7,10 @@ using System.Threading.Tasks;
 using System.Linq.Expressions;
 using MyNote.DataAccessLayer.MySql;
 
+
 namespace MyNote.BussinessLayer.Abstact
 {
+    
     public abstract class ManagerBase<T> : IDataAccess<T> where T:class
     {
         private Repository<T> repo = new Repository<T>();

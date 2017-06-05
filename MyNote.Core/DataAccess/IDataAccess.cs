@@ -17,8 +17,6 @@ namespace MyNote.Core.DataAccess
         T Find(Expression<Func<T, bool>> predicate);
         int Save();
          IQueryable<T> ListQueryable();
-        
-
-
+ 
     }
 }

@@ -1,0 +1,23 @@
+﻿
+@{
+    ViewBag.Title = "ErrorFil";
+}
+
+<h2>hata sayfası</h2>
+@{ 
+    Exception ex = null;
+
+    if(TempData["error"]!=null)
+    {
+        ex = TempData["error"] as Exception;
+    }
+}
+
+<h1><span class="glyphicon glyphicon-remove"></span> bir hata oluştur</h1>
+
+@if(ex!=null)
+{
+    <strong>hata detayı</strong>
+    @(ex.Message)
+   
+}
