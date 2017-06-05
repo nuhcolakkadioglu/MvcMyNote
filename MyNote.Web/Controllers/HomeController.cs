@@ -26,7 +26,7 @@ namespace MyNote.Web.Controllers
         public ActionResult Index()
         {
             //if (TempData["mm"]!=null)
-            //{2c
+            //{
             //    return View(TempData["mm"] as List<Note>);
 
             //}
